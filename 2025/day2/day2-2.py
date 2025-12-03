@@ -8,8 +8,6 @@ ans = 0
 invalids = set()
 for start, end in ranges:
     for num in range(start, end + 1):
-        if num == 1188511885:
-            x = 7
         length = len(str(num))
         for i in range(1, 1 + length // 2):
             if length % i == 0:

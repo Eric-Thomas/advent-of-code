@@ -1,5 +1,5 @@
 ranges = []
-with open("/Users/eric/Projects/advent-of-code/2025/inputs/day2-data.txt", "r") as fp:
+with open("inputs/day2-data.txt", "r") as fp:
     line = fp.readline()
     for range_id in line.split(","):
         ranges.append([int(range_id.split("-")[0]), int(range_id.split("-")[1])])

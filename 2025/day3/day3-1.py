@@ -2,7 +2,7 @@ from typing import List
 
 BATTERY_LIMIT = 2
 
-with open("/Users/eric/Projects/advent-of-code/2025/inputs/day3-data.txt", "r") as fp:
+with open("inputs/day3-data.txt", "r") as fp:
     lines = [line.strip() for line in fp.readlines()]
 
 batteries: List[List[str]] = []

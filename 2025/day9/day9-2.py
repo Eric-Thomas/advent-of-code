@@ -39,8 +39,11 @@ for area, red_p1, red_p2 in areas_and_points:
         # Vertical line
         if green_x1 == green_x2:
             if min(red_x1, red_x2) < green_x1 < max(red_x1, red_x2) and (
+                # Either endpoint is inside red
                 min(red_y1, red_y2) <= green_y1 <= max(red_y1, red_y2)
                 or min(red_y1, red_y2) <= green_y2 <= max(red_y1, red_y2)
+                # Both endpoints outside red
+                or (min(green_y1, green_y2) <= min(red_y1, red_y2) and max(green_y1, green_y2) >= max(red_y1, red_y2))
             ):
                 green_line_inside = True
                 break
@@ -50,6 +53,7 @@ for area, red_p1, red_p2 in areas_and_points:
             if min(red_y1, red_y2) < green_y1 < max(red_y1, red_y2) and (
                 min(red_x1, red_x2) <= green_x1 <= max(red_x1, red_x2)
                 or min(red_x1, red_x2) <= green_x2 <= max(red_x1, red_x2)
+                or (min(green_x1, green_x2) <= min(red_x1, red_x2) and max(green_x1, green_x2) >= max(red_x1, red_x2))
             ):
                 green_line_inside = True
                 break
@@ -58,5 +62,23 @@ for area, red_p1, red_p2 in areas_and_points:
             raise Exception(f"Your green line {green_p1, green_p2} is not a straight line")
 
     if not green_line_inside:
-        print(f"Largest area {area}")
-        break
+        # Ray cast and check if our rectangle is fully inside or fully outside
+        # Check against L shaped green lines
+        cast_point = (min(red_x1, red_x2) + 0.5, min(red_y1, red_y2) + 0.5)
+        x, y = cast_point
+        # Shoot directly up and count how many intersections
+        intersections = 0
+        for green_p1, green_p2 in green_lines:
+            green_x1, green_y1 = green_p1
+            green_x2, green_y2 = green_p2
+
+            # We only care about horizontal lines because we are shooting a ray straight up
+            # and we offset the point by 0.5 and vertical lines are on whole integer numbers
+            if green_y1 == green_y2:
+                if min(green_x1, green_x2) <= x <= max(green_x1, green_x2) and y < green_y1:
+                    intersections += 1
+
+        # Rectangle fully inside shape
+        if intersections % 2 == 1:
+            print(f"Largest area {area}")
+            break

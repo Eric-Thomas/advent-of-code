@@ -33,30 +33,34 @@ for area, red_p1, red_p2 in areas_and_points:
     red_x1, red_y1 = red_p1
     red_x2, red_y2 = red_p2
     green_line_inside = False
+
+    red_x_min = min(red_x1, red_x2)
+    red_x_max = max(red_x1, red_x2)
+    red_y_min = min(red_y1, red_y2)
+    red_y_max = max(red_y1, red_y2)
+
     for green_p1, green_p2 in green_lines:
         green_x1, green_y1 = green_p1
         green_x2, green_y2 = green_p2
+
+        green_x_min = min(green_x1, green_x2)
+        green_x_max = max(green_x1, green_x2)
+        green_y_min = min(green_y1, green_y2)
+        green_y_max = max(green_y1, green_y2)
+
         # Vertical line
         if green_x1 == green_x2:
-            if min(red_x1, red_x2) < green_x1 < max(red_x1, red_x2) and (
-                # Either endpoint is inside red
-                min(red_y1, red_y2) <= green_y1 <= max(red_y1, red_y2)
-                or min(red_y1, red_y2) <= green_y2 <= max(red_y1, red_y2)
-                # Both endpoints outside red
-                or (min(green_y1, green_y2) <= min(red_y1, red_y2) and max(green_y1, green_y2) >= max(red_y1, red_y2))
-            ):
-                green_line_inside = True
-                break
+            if red_x_min < green_x1 < red_x_max:
+                if green_y_min < red_y_max and red_y_min < green_y_max:
+                    green_line_inside = True
+                    break
 
         # Horizontal line
         elif green_y1 == green_y2:
-            if min(red_y1, red_y2) < green_y1 < max(red_y1, red_y2) and (
-                min(red_x1, red_x2) <= green_x1 <= max(red_x1, red_x2)
-                or min(red_x1, red_x2) <= green_x2 <= max(red_x1, red_x2)
-                or (min(green_x1, green_x2) <= min(red_x1, red_x2) and max(green_x1, green_x2) >= max(red_x1, red_x2))
-            ):
-                green_line_inside = True
-                break
+            if red_y_min < green_y1 < red_y_max:
+                if green_x_min < red_x_max and red_x_min < green_x_max:
+                    green_line_inside = True
+                    break
 
         else:
             raise Exception(f"Your green line {green_p1, green_p2} is not a straight line")
